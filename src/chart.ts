@@ -6,7 +6,7 @@ import { getTimeData, TimeData } from "./time";
 const chartContainer = document.getElementById("chart-container") as HTMLDivElement;
 
 const SVG_SIZE: number = 600;
-const HOUR_LABEL_RADIUS: number = SVG_SIZE * 0.25;
+const HOUR_TICK_LABEL_RADIUS: number = SVG_SIZE * 0.25;
 const HOUR_ARC_INNER_RADIUS: number = SVG_SIZE * 0.30;
 const HOUR_ARC_OUTER_RADIUS: number = SVG_SIZE * 0.40;
 const VIGIL_ARC_INNER_RADIUS: number = SVG_SIZE * 0.405;
@@ -132,10 +132,11 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .data(d3.range(24))
         .enter()
         .append("line")
+        .attr("id", (d, i) => `hour-tick${i}`)
         .attr("class", "hour-tick")
         .attr("x1", 0)
         .attr("x2", 0)
-        .attr("y1", HOUR_ARC_INNER_RADIUS * 0.90)
+        .attr("y1", HOUR_ARC_INNER_RADIUS * 0.925)
         .attr("y2", HOUR_ARC_INNER_RADIUS * 0.95)
         .attr("transform", (d: number) => `rotate(${hourScale(d)})`);
 
@@ -143,13 +144,13 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .data(d3.range(24))
         .enter()
         .append("text")
-        .attr("class", "hour-tick-label")
+        .attr("id", (d, i) => `hour-tick-label${i}`)
         .attr("text-anchor", "middle")
         .attr("x", (d) => {
-            return HOUR_LABEL_RADIUS * Math.sin(hourScale(d) * (Math.PI / 180));
+            return HOUR_TICK_LABEL_RADIUS * Math.sin(hourScale(d) * (Math.PI / 180));
         })
         .attr("y", (d) => {
-            return (-HOUR_LABEL_RADIUS) * Math.cos(hourScale(d) * (Math.PI / 180)) + 4;
+            return (-HOUR_TICK_LABEL_RADIUS) * Math.cos(hourScale(d) * (Math.PI / 180)) + 4;
         })
         .text((d: number) => d === 0 ? 24 : d);
 

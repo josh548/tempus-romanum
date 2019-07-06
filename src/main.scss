@@ -28,6 +28,20 @@ svg {
     stroke: black;
 }
 
+#hour-tick-label0,
+#hour-tick-label6,
+#hour-tick-label12,
+#hour-tick-label18 {
+    font-size: 1.5rem;
+}
+
+#hour-tick-label3,
+#hour-tick-label9,
+#hour-tick-label15,
+#hour-tick-label21 {
+    font-size: 1.25rem;
+}
+
 .quarter-label {
     font-size: 1.5rem;
 }
