@@ -34,10 +34,11 @@ const hourLabelRadius = size * 0.25;
 const hourArcInnerRadius = size * 0.30;
 const hourArcOuterRadius = size * 0.40;
 const vigilArcInnerRadius = size * 0.405;
-const vigilArcOuterRadius = size * 0.455;
+const vigilArcOuterRadius = size * 0.445;
+const quarterArcInnerRadius = size * 0.45;
+const quarterArcOuterRadius = size * 0.50;
 
 const hourLabels = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
-
 const hourData = [];
 
 for (let i = 0; i < 12; i++) {
@@ -70,6 +71,54 @@ for (let i = 0; i < 12; i++) {
     });
 }
 
+const vigilData = [
+    {
+        startAngle: hourData[12].startAngle,
+        endAngle: hourData[15].startAngle,
+        label: "VIGILIA I",
+    },
+    {
+        startAngle: hourData[15].startAngle,
+        endAngle: hourData[18].startAngle,
+        label: "VIGILIA II",
+    },
+    {
+        startAngle: hourData[18].startAngle,
+        endAngle: hourData[21].startAngle,
+        label: "VIGILIA III",
+    },
+    {
+        startAngle: hourData[21].startAngle,
+        endAngle: hourData[0].startAngle + (Math.PI * 2),
+        label: "VIGILIA IV",
+    },
+];
+
+const quarterData = [
+    {
+        startAngle: hourData[0].startAngle - (Math.PI / 2),
+        endAngle: hourData[0].startAngle + (Math.PI / 2),
+        label: "MANE",
+    },
+    {
+        startAngle: hourData[6].startAngle - (Math.PI / 2),
+        endAngle: hourData[6].startAngle + (Math.PI / 2),
+        label: "DIES",
+    },
+    {
+        isDaytime: true,
+        startAngle: hourData[12].startAngle - (Math.PI / 2),
+        endAngle: hourData[12].startAngle + (Math.PI / 2),
+        label: "VESPER",
+    },
+    {
+        isDaytime: false,
+        startAngle: hourData[18].startAngle - (Math.PI / 2),
+        endAngle: hourData[18].startAngle + (Math.PI / 2),
+        label: "NOX",
+    },
+];
+
 const hourArc = d3.arc()
     .innerRadius(hourArcInnerRadius)
     .outerRadius(hourArcOuterRadius)
@@ -80,6 +129,13 @@ const hourArc = d3.arc()
 const vigilArc = d3.arc()
     .innerRadius(vigilArcInnerRadius)
     .outerRadius(vigilArcOuterRadius)
+    .startAngle((d) => d.startAngle)
+    .endAngle((d) => d.endAngle)
+    .padAngle(0.01);
+
+const quarterArc = d3.arc()
+    .innerRadius(quarterArcInnerRadius)
+    .outerRadius(quarterArcOuterRadius)
     .startAngle((d) => d.startAngle)
     .endAngle((d) => d.endAngle)
     .padAngle(0.01);
@@ -105,9 +161,9 @@ svg.selectAll(".hour-arc")
             // Capture everything between the capital M and first capital A
             const startLocator = /M(.*?)A/;
             // Capture everything between the capital A and 0 0 1
-            const middleLocator = /A(.*?)0 0 1/;
+            const middleLocator = /A(.*?)0 [0-1] 1/;
             // Capture everything between the 0 0 1 and the end of the string
-            const endLocator = /0 0 1 (.*?)$/;
+            const endLocator = /0 [0-1] 1 (.*?)$/;
             // Flip the direction of the arc by switching the start and end
             // point and using a 0 (instead of 1) sweep flag
             const newStart = endLocator.exec(newArc)![1];
@@ -130,7 +186,8 @@ svg.selectAll(".hour-label")
     .data(hourData)
     .enter().append("text")
     .attr("class", "hour-label")
-    // Move the labels below the arcs for slices with an end angle > than 90 degrees
+    // Move the labels below the arcs for daytime hours so that the text appears
+    // rightside up
     .attr("dy", (d) => {
         if (d.isDaytime) {
             return (-(((hourArcOuterRadius - hourArcInnerRadius) / 2) - 6));
@@ -173,29 +230,6 @@ svg.selectAll(".hour-tick-label")
     })
     .text((d) => d === 0 ? 24 : d);
 
-const vigilData = [];
-
-vigilData.push({
-    startAngle: hourData[12].startAngle,
-    endAngle: hourData[15].startAngle,
-    label: "VIGILIA PRIMA",
-});
-vigilData.push({
-    startAngle: hourData[15].startAngle,
-    endAngle: hourData[18].startAngle,
-    label: "VIGILIA SECVNDA",
-});
-vigilData.push({
-    startAngle: hourData[18].startAngle,
-    endAngle: hourData[21].startAngle,
-    label: "VIGILIA TERTIA",
-});
-vigilData.push({
-    startAngle: hourData[21].startAngle,
-    endAngle: hourData[0].startAngle + (Math.PI * 2),
-    label: "VIGILIA QVARTA",
-});
-
 svg.selectAll(".vigil-arc")
     .data(vigilData)
     .enter()
@@ -228,4 +262,65 @@ svg.selectAll(".vigil-label")
     .attr("startOffset", "50%")
     .style("text-anchor", "middle")
     .attr("xlink:href", (d, i) => `#hidden-vigil-arc${i}`)
+    .text((d) => d.label);
+
+svg.selectAll(".quarter-arc")
+    .data(quarterData)
+    .enter()
+    .append("path")
+    .attr("id", (d, i) => `quarter-arc${i}`)
+    .attr("d", quarterArc as any)
+    .style("fill", "none")
+    .each(function(d, i) {
+        // Captures everything up to the first L
+        const firstArcSection = /(^.+?)L/;
+
+        // Extract the arc statement
+        let newArc = firstArcSection.exec(d3.select(this).attr("d"))![1];
+        newArc = newArc.replace(/,/g, " ");
+
+        // Flip the start and end positions for daytime hours so that the text
+        // appear rightside up
+        const averageAngle = (d.startAngle + d.endAngle) / 2;
+        if (averageAngle > (Math.PI / 2) && averageAngle < (Math.PI * 1.5)) {
+            // Capture everything between the capital M and first capital A
+            const startLocator = /M(.*?)A/;
+            // Capture everything between the capital A and 0 0 1
+            const middleLocator = /A(.*?)0 [0-1] 1/;
+            // Capture everything between the 0 0 1 and the end of the string
+            const endLocator = /0 [0-1] 1 (.*?)$/;
+            // Flip the direction of the arc by switching the start and end
+            // point and using a 0 (instead of 1) sweep flag
+            const newStart = endLocator.exec(newArc)![1];
+            const newEnd = startLocator.exec(newArc)![1];
+            const middleSec = middleLocator.exec(newArc)![1];
+
+            // Build up the new arc notation and set the sweep flag to 0
+            newArc = "M" + newStart + "A" + middleSec + "0 0 0 " + newEnd;
+        }
+
+        // Create a new invisible arc that the text can flow along
+        svg.append("path")
+            .attr("class", "hidden-quarter-arc")
+            .attr("id", `hidden-quarter-arc${i}`)
+            .attr("d", newArc)
+            .style("fill", "none");
+    });
+
+svg.selectAll(".quarter-label")
+    .data(quarterData)
+    .enter().append("text")
+    .attr("class", "quarter-label")
+    .attr("dy", (d) => {
+        const averageAngle = (d.startAngle + d.endAngle) / 2;
+        if (averageAngle > (Math.PI / 2) && averageAngle < (Math.PI * 1.5)) {
+            return (-(((quarterArcOuterRadius - quarterArcInnerRadius) / 2) - 6));
+        } else {
+            return (((quarterArcOuterRadius - quarterArcInnerRadius) / 2) + 4);
+        }
+    })
+    .append("textPath")
+    .attr("startOffset", "50%")
+    .style("text-anchor", "middle")
+    .attr("xlink:href", (d, i) => `#hidden-quarter-arc${i}`)
     .text((d) => d.label);
