@@ -38,7 +38,21 @@ const vigilArcOuterRadius = size * 0.445;
 const quarterArcInnerRadius = size * 0.45;
 const quarterArcOuterRadius = size * 0.50;
 
-const hourLabels = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+const ordinalsShort = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+const ordinalsFull = [
+    "prīma",
+    "secunda",
+    "tertia",
+    "quārta",
+    "quīnta",
+    "sexta",
+    "septima",
+    "octāva",
+    "nōna",
+    "decima",
+    "ūndecima",
+    "duodecima",
+];
 const hourData = [];
 
 for (let i = 0; i < 12; i++) {
@@ -52,7 +66,7 @@ for (let i = 0; i < 12; i++) {
         isDaytime: true,
         startAngle: hourStartTimeRadians,
         endAngle: hourEndTimeRadians,
-        label: hourLabels[i],
+        label: ordinalsShort[i],
     });
 }
 
@@ -67,7 +81,7 @@ for (let i = 0; i < 12; i++) {
         isDaytime: false,
         startAngle: hourStartTimeRadians,
         endAngle: hourEndTimeRadians,
-        label: hourLabels[i],
+        label: ordinalsShort[i],
     });
 }
 
@@ -180,7 +194,9 @@ svg.selectAll(".hour-arc")
             .attr("id", `hidden-hour-arc${i}`)
             .attr("d", newArc)
             .style("fill", "none");
-    });
+    })
+    .append("svg:title")
+    .text((d, i) => `${d.isDaytime ? "diēī" : "noctis"} hōra ${ordinalsFull[i % 12]}`);
 
 svg.selectAll(".hour-label")
     .data(hourData)
@@ -199,7 +215,9 @@ svg.selectAll(".hour-label")
     .attr("startOffset", "50%")
     .style("text-anchor", "middle")
     .attr("xlink:href", (d, i) => `#hidden-hour-arc${i}`)
-    .text((d) => d.label);
+    .text((d) => d.label)
+    .append("svg:title")
+    .text((d, i) => `${d.isDaytime ? "diēī" : "noctis"} hōra ${ordinalsFull[i % 12]}`);
 
 const hourScale = d3.scaleLinear()
     .domain([0, 23])
@@ -251,7 +269,9 @@ svg.selectAll(".vigil-arc")
             .attr("id", `hidden-vigil-arc${i}`)
             .attr("d", newArc)
             .style("fill", "none");
-    });
+    })
+    .append("svg:title")
+    .text((d, i) => `vigilia ${ordinalsFull[i]}`);
 
 svg.selectAll(".vigil-label")
     .data(vigilData)
@@ -262,7 +282,9 @@ svg.selectAll(".vigil-label")
     .attr("startOffset", "50%")
     .style("text-anchor", "middle")
     .attr("xlink:href", (d, i) => `#hidden-vigil-arc${i}`)
-    .text((d) => d.label);
+    .text((d) => d.label)
+    .append("svg:title")
+    .text((d, i) => `vigilia ${ordinalsFull[i]}`);
 
 svg.selectAll(".quarter-arc")
     .data(quarterData)
