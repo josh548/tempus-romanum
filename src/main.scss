@@ -1,0 +1,33 @@
+@charset "utf-8";
+@import "~bulma/bulma";
+
+.field {
+    display: inline-block;
+}
+
+.input {
+    width: initial;
+}
+
+svg {
+    font-family: 'Hoefler Text', 'Georgia', serif;
+    letter-spacing: 0.1rem;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+}
+
+.hour-day {
+    fill: skyblue;
+}
+
+.hour-night {
+    fill: orange;
+}
+
+.hour-tick {
+    stroke: black;
+}
+
+.quarter-label {
+    font-size: 1.5rem;
+}

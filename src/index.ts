@@ -1,9 +1,18 @@
 import moment from "moment";
 
-import {drawChart} from "./chart";
+import { drawChart } from "./chart";
+import "./main.scss";
 
-const SUNRISE_TIME: string = "6:07 am";
-const SUNSET_TIME: string = "8:10 pm";
-const sunriseMoment: moment.Moment = moment(SUNRISE_TIME, ["h:m a"]);
-const sunsetMoment: moment.Moment = moment(SUNSET_TIME, ["h:m a"]);
-drawChart(sunriseMoment, sunsetMoment);
+const sunriseInput = document.getElementById("sunrise") as HTMLInputElement;
+const sunsetInput = document.getElementById("sunset") as HTMLInputElement;
+const updateButton = document.getElementById("update") as HTMLButtonElement;
+
+function updateChart() {
+    const sunriseTime = moment(sunriseInput.value, ["HH:mm"]);
+    const sunsetTime = moment(sunsetInput.value, ["HH:mm"]);
+    drawChart(sunriseTime, sunsetTime);
+}
+
+updateButton.addEventListener("click", updateChart);
+
+updateChart();

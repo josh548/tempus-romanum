@@ -6,37 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TEMPVS ROMANVM</title>
-    <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Hoefler Text', 'Georgia', serif;
-            letter-spacing: 0.1rem;
-        }
-
-        .hour-day {
-            fill: skyblue;
-        }
-
-        .hour-night {
-            fill: orange;
-        }
-
-        .hour-tick {
-            stroke: black;
-        }
-
-        .quarter-label {
-            font-size: 1.5rem;
-        }
-    </style>
+    <link rel="stylesheet" href="bundle.css">
 </head>
 
 <body>
+    <section class="section">
+        <div class="container">
+            <div class="field">
+                <label class="label">Sunrise</label>
+                <div class="control">
+                    <input id="sunrise" class="input" type="time" value="06:07">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Sunset</label>
+                <div class="control">
+                    <input id="sunset" class="input" type="time" value="20:10">
+                </div>
+            </div>
+            <div class="field">
+                <p class="control">
+                    <button id="update" class="button">
+                        Update
+                    </button>
+                </p>
+            </div>
+            <div id="chart-container">
+                <svg id="chart" width="600" height="600" viewBox="0 0 600 600" perserveAspectRatio="xMinYMid"></svg>
+            </div>
+        </div>
+    </section>
     <script src="bundle.js"></script>
 </body>
 

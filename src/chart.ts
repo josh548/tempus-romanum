@@ -3,8 +3,9 @@ import moment from "moment";
 
 import { getTimeData, TimeData } from "./time";
 
-const SVG_SIZE: number = Math.min(window.innerWidth, window.innerHeight);
+const chartContainer = document.getElementById("chart-container") as HTMLDivElement;
 
+const SVG_SIZE: number = 600;
 const HOUR_LABEL_RADIUS: number = SVG_SIZE * 0.25;
 const HOUR_ARC_INNER_RADIUS: number = SVG_SIZE * 0.30;
 const HOUR_ARC_OUTER_RADIUS: number = SVG_SIZE * 0.40;
@@ -56,10 +57,9 @@ const hourScale = d3.scaleLinear()
 export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Moment): void {
     const timeData: TimeData = getTimeData(sunriseMoment, sunsetMoment);
 
-    const svg = d3.select("body")
-        .append("svg")
-        .attr("width", SVG_SIZE)
-        .attr("height", SVG_SIZE)
+    d3.select("#chart").selectAll("*").remove();
+
+    const svg = d3.select("#chart")
         .append("g")
         .attr("transform", `translate(${SVG_SIZE / 2}, ${SVG_SIZE / 2})`);
 
@@ -252,3 +252,12 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .attr("xlink:href", (d, i) => `#hidden-quarter-arc${i}`)
         .text((d) => d.label);
 }
+
+function resizeChart() {
+    const targetWidth = Math.min(chartContainer.clientWidth, SVG_SIZE);
+    d3.select("#chart")
+        .attr("width", targetWidth)
+        .attr("height", targetWidth);
+}
+window.addEventListener("resize", () => resizeChart);
+resizeChart();
