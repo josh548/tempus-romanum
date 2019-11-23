@@ -1,7 +1,10 @@
 import moment from "moment";
 
 import { drawChart } from "./chart";
-import "./main.scss";
+
+import "bulma/css/bulma.css";
+
+import "./main.css";
 
 const sunriseInput = document.getElementById("sunrise") as HTMLInputElement;
 const sunsetInput = document.getElementById("sunset") as HTMLInputElement;
