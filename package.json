@@ -1,16 +1,23 @@
 {
   "name": "tempus-romanum",
   "version": "1.0.0",
-  "description": "",
+  "description": "Clock based on ancient Roman timekeeping using D3.js",
   "private": true,
   "scripts": {
-    "lint": "tslint -c tslint.json -p tsconfig.json",
     "build": "webpack",
-    "build:watch": "webpack -w"
+    "build:watch": "webpack -w",
+    "lint": "tslint -p tsconfig.json"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escamilla/tempus-romanum.git"
+  },
+  "author": "Joshua Escamilla <joshua.escamilla@selu.edu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/escamilla/game-of-life/issues"
+  },
+  "homepage": "https://github.com/escamilla/game-of-life#readme",
   "devDependencies": {
     "@types/d3": "^5.7.2",
     "css-loader": "^3.5.3",
@@ -26,6 +33,6 @@
   "dependencies": {
     "bulma": "^0.8.2",
     "d3": "^5.16.0",
-    "moment": "^2.25.3"
+    "moment": "^2.26.0"
   }
 }
