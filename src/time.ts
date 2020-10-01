@@ -28,7 +28,7 @@ export function getTimeData(sunriseMoment: moment.Moment, sunsetMoment: moment.M
     const dayHour: moment.Duration = moment.duration(sunriseToSunset / 12);
     const nightHour: moment.Duration = moment.duration(sunsetToSunrise / 12);
 
-    for (let i: number = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i++) {
         const hourStartTime: moment.Moment = sunriseMoment.clone().add(dayHour.asMilliseconds() * i);
         const hourEndTime: moment.Moment = hourStartTime.clone().add(dayHour.asMilliseconds());
         const hourStartTimeRadians: number = Math.PI * 2 * getPercentOfDay(hourStartTime);
@@ -40,7 +40,7 @@ export function getTimeData(sunriseMoment: moment.Moment, sunsetMoment: moment.M
             label: ORDINALS[i],
         });
     }
-    for (let i: number = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i++) {
         const hourStartTime: moment.Moment = sunsetMoment.clone().add(nightHour.asMilliseconds() * i);
         const hourEndTime: moment.Moment = hourStartTime.clone().add(nightHour.asMilliseconds());
         const hourStartTimeRadians: number = Math.PI * 2 * getPercentOfDay(hourStartTime);

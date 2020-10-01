@@ -5,7 +5,7 @@ import { getTimeData, TimeData } from "./time";
 
 const chartContainer = document.getElementById("chart-container") as HTMLDivElement;
 
-const SVG_SIZE: number = 600;
+const SVG_SIZE = 600;
 const HOUR_TICK_LABEL_RADIUS: number = SVG_SIZE * 0.25;
 const HOUR_ARC_INNER_RADIUS: number = SVG_SIZE * 0.30;
 const HOUR_ARC_OUTER_RADIUS: number = SVG_SIZE * 0.40;
@@ -69,12 +69,14 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .append("path")
         .attr("class", (d) => d.isDaytime ? "hour-day" : "hour-night")
         .attr("id", (d, i) => `hour-arc${i}`)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .attr("d", hourArc as any)
         .each(function(d, i) {
             // Captures everything up to the first L
             const firstArcSection = /(^.+?)L/;
 
             // Extract the arc statement
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             let newArc: string = firstArcSection.exec(d3.select(this).attr("d"))![1];
             newArc = newArc.replace(/,/g, " ");
 
@@ -89,8 +91,11 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
                 const endLocator = /0 [0-1] 1 (.*?)$/;
                 // Flip the direction of the arc by switching the start and end
                 // point and using a 0 (instead of 1) sweep flag
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const newStart: string = endLocator.exec(newArc)![1];
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const newEnd: string = startLocator.exec(newArc)![1];
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const middleSec: string = middleLocator.exec(newArc)![1];
 
                 // Build up the new arc notation and set the sweep flag to 0
@@ -160,12 +165,14 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .append("path")
         .attr("class", "hour-night")
         .attr("id", (d, i) => `vigil-arc${i}`)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .attr("d", vigilArc as any)
         .each(function(d, i) {
             // Captures everything up to the first L
             const firstArcSection = /(^.+?)L/;
 
             // Extract the arc statement
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             let newArc: string = firstArcSection.exec(d3.select(this).attr("d"))![1];
             newArc = newArc.replace(/,/g, " ");
 
@@ -197,6 +204,7 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .enter()
         .append("path")
         .attr("id", (d, i) => `quarter-arc${i}`)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .attr("d", quarterArc as any)
         .style("fill", "none")
         .each(function(d, i) {
@@ -204,6 +212,7 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
             const firstArcSection = /(^.+?)L/;
 
             // Extract the arc statement
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             let newArc = firstArcSection.exec(d3.select(this).attr("d"))![1];
             newArc = newArc.replace(/,/g, " ");
 
@@ -219,8 +228,11 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
                 const endLocator = /0 [0-1] 1 (.*?)$/;
                 // Flip the direction of the arc by switching the start and end
                 // point and using a 0 (instead of 1) sweep flag
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const newStart: string = endLocator.exec(newArc)![1];
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const newEnd: string = startLocator.exec(newArc)![1];
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const middleSec: string = middleLocator.exec(newArc)![1];
 
                 // Build up the new arc notation and set the sweep flag to 0
