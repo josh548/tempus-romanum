@@ -152,10 +152,12 @@ export function drawChart(sunriseMoment: moment.Moment, sunsetMoment: moment.Mom
         .attr("id", (d, i) => `hour-tick-label${i}`)
         .attr("text-anchor", "middle")
         .attr("x", (d) => {
-            return HOUR_TICK_LABEL_RADIUS * Math.sin(hourScale(d) * (Math.PI / 180));
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return HOUR_TICK_LABEL_RADIUS * Math.sin(hourScale(d)! * (Math.PI / 180));
         })
         .attr("y", (d) => {
-            return (-HOUR_TICK_LABEL_RADIUS) * Math.cos(hourScale(d) * (Math.PI / 180)) + 4;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return (-HOUR_TICK_LABEL_RADIUS) * Math.cos(hourScale(d)! * (Math.PI / 180)) + 4;
         })
         .text((d: number) => d === 0 ? 24 : d);
 
